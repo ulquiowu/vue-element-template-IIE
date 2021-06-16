@@ -45,24 +45,26 @@ namespace iie_erp_assist_server.Controllers
 
             try
             {
-                using AssistContext DB = new();
-                DataTable dt = DBContextEx.SqlQuery(DB.Database, CommandType.Text, sql, ps);
-                // 用户名或者密码错误 直接返回
-                if (dt.Rows.Count <= 0)
-                {
-                    var response = FormatApiResult<Login>.result(login, new Meta
-                    {
-                        Msg = "用户名或密码错误",
-                        Status = Services.StatusCode.NOT_FOUND
-                    });
-                    return await FinalApiResult<Login>.Get(response);
-                }
-                // 验证成功，生成 token 信息并保存到内存中
-                // 取第一行数据
-                DataRow dr = dt.Rows[0];
+                //using AssistContext DB = new();
+                //DataTable dt = DBContextEx.SqlQuery(DB.Database, CommandType.Text, sql, ps);
+                //// 用户名或者密码错误 直接返回
+                //if (dt.Rows.Count <= 0)
+                //{
+                //    var response = FormatApiResult<Login>.result(login, new Meta
+                //    {
+                //        Msg = "用户名或密码错误",
+                //        Status = Services.StatusCode.NOT_FOUND
+                //    });
+                //    return await FinalApiResult<Login>.Get(response);
+                //}
+                //// 验证成功，生成 token 信息并保存到内存中
+                //// 取第一行数据
+                //DataRow dr = dt.Rows[0];
                 TokenDTO token = new();
-                token.usercode = dr["code"].ToString();
-                token.username = dr["name"].ToString();
+                //token.usercode = dr["code"].ToString();
+                //token.username = dr["name"].ToString();
+                token.usercode = "admin";
+                token.username = "admin";
                 TokenDTO finalToken = AutToken.IssueJWT(token, new TimeSpan(0, 0, 30, 0), new TimeSpan(1, 0, 0, 0)); // 生成Token并存储到内存,TimeSpan(day,hour,minute,second)
                 // 验证token是否已正确存入内存
                 var tokenMemory = AutMemoryCache.Get(finalToken.token);

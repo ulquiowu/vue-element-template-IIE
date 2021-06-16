@@ -52,8 +52,8 @@ export default {
     return {
       //   表单数据绑定对象
       loginForm: {
-        username: '',
-        password: '',
+        username: 'admin',
+        password: 'admin',
         plant: ''
       },
       //   表单验证规则对象

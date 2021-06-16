@@ -9,24 +9,36 @@
       <el-menu background-color="#333744" text-color="#fff" active-text-color="#409EFF"
       unique-opened :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath">
         <!-- 一级菜单 -->
-        <el-submenu index="">
-          <!-- 一级菜单的模板区域 -->
-          <template slot="title">
-            <!-- 图标 -->
-            <i class="el-icon-s-order"></i>
-            <!-- 文本 -->
-            <span>请购单</span>
-          </template>
-          <!-- 二级菜单 -->
-          <el-menu-item index="/applydetail" @click="saveNavState('/applydetail')">
+          <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
+            <!-- 一级菜单的模板区域 -->
             <template slot="title">
               <!-- 图标 -->
-              <i class="el-icon-menu"></i>
+              <i :class="iconsObj[item.id]"></i>
               <!-- 文本 -->
+              <span>{{item.authName}}</span>
+            </template>
+            <!-- 二级菜单 -->
+            <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
+              <template slot="title">
+                <!-- 图标 -->
+                <i class="el-icon-menu"></i>
+                <!-- 文本 -->
+                <span>{{subItem.authName}}</span>
+              </template>
+            </el-menu-item>
+          </el-submenu>
+        <!-- <el-submenu index="">
+          <template slot="title">
+            <i class="el-icon-s-order"></i>
+            <span>请购单</span>
+          </template>
+          <el-menu-item index="/applydetail" @click="saveNavState('/applydetail')">
+            <template slot="title">
+              <i class="el-icon-menu"></i>
               <span>请购单明细</span>
             </template>
           </el-menu-item>
-        </el-submenu>
+        </el-submenu> -->
       </el-menu>
     </el-aside>
     <!-- 页面主体区域 -->
@@ -91,10 +103,10 @@ export default {
     }
   },
   created () {
-    // this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
     this.plant = window.sessionStorage.getItem('plant')
     this.username = window.sessionStorage.getItem('username')
+    this.getMenuList()
     if (this.plant === 'XUS') {
       this.img = require('../assets/XUSTitle.png')
     } else {
@@ -109,9 +121,10 @@ export default {
     },
     // 获取所有的菜单
     async getMenuList () {
-      const { data: res } = await this.$http.get('menus')
+      const { data: res } = await this.$http.get('menu/' + this.username)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.menulist = res.data
+      this.menulist = res.details
+      window.sessionStorage.setItem('menulist', JSON.stringify(res.details))
       console.log(res)
     },
     // 点击按钮，切换菜单的折叠与展开

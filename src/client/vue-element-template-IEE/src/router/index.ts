@@ -4,22 +4,35 @@ import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import ApplyDetail from '../views/apply/ApplyDetail.vue'
+// import Menu11 from '../views/apply/Menu11.vue'
 
 Vue.use(VueRouter)
 
-const routes: Array<RouteConfig> = [
+const routes: RouteConfig[] = [
   { path: '/', redirect: '/login' },
-  { path: '/login', component: Login, meta: { title: '登录' } },
-  {
-    path: '/home',
-    component: Home,
-    redirect: '/about',
-    children: [
-      { path: '/about', component: About, meta: { title: '关于' } },
-      { path: '/applydetail', component: ApplyDetail, meta: { title: '请购单明细' } }
-    ]
-  }
+  { path: '/login', component: Login, meta: { title: '登录' } }
+  // {
+  //   path: '/home',
+  //   component: Home,
+  //   redirect: '/about',
+  //   children: [
+  //     { path: '/about', component: About, meta: { title: '关于' } },
+  //     { path: '/applydetail', component: ApplyDetail, meta: { title: '请购单明细' } }
+  //     // { path: '/1-1', component: Menu11, meta: { title: 'Menu11' } }
+  //   ]
+  // }
 ]
+
+const main: RouteConfig =
+{
+  path: '/home',
+  component: Home,
+  // redirect: '/about',
+  children: [
+    { path: '/about', component: About, meta: { title: '关于' } },
+    { path: '/applydetail', component: ApplyDetail, meta: { title: '请购单明细' } }
+  ]
+}
 
 const router = new VueRouter({
   routes
@@ -39,6 +52,15 @@ router.beforeEach((to, from, next) => {
   // next 放行
   // next() 放行
   // next('/login') 强制跳转到某个页面
+  const routelsit = []
+  const route = {
+    path: '/1-1',
+    component: () => import('../views/apply/Menu11.vue'),
+    meta: { title: 'Menu11' }
+  }
+  routelsit.push(route)
+  main.children!.concat(routelsit)
+  router.addRoute(main)
   if (to.path === '/login') return next()
   // 获取 token
   const tokenStr = window.sessionStorage.getItem('token')

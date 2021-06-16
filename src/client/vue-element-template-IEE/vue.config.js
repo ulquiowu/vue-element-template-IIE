@@ -7,7 +7,7 @@ module.exports = {
 		devServer: {
 			proxy: {
 				'/api': {
-					target: 'http://192.168.0.62:8070/api', //设置你调用的接口域名和端口号 
+					target: 'http://localhost:16670/api', //设置你调用的接口域名和端口号 
 					changeOrigin: true, //这里设置是否跨域
 					pathRewrite: { // 路径重写
 					'^/api': ''

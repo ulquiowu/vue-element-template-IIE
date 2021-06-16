@@ -82,6 +82,20 @@
             <param name="plant">厂区编码 XUS 或 IIE</param>
             <returns></returns>
         </member>
+        <member name="T:iie_erp_assist_server.Controllers.MenuController">
+            <summary>
+            菜单模块
+            </summary>
+        </member>
+        <member name="M:iie_erp_assist_server.Controllers.MenuController.Put(System.String,System.String,System.Int32)">
+            <summary>
+            取消请购信息
+            </summary>
+            <param name="plant">必填项:厂区编码 XUS 或 IIE</param>
+            <param name="billnum">必填项:请购单号</param>
+            <param name="item">必填项:请购单项</param>
+            <returns></returns>
+        </member>
         <member name="T:iie_erp_assist_server.Controllers.PreApplyController">
             <summary>
             申请单模块
